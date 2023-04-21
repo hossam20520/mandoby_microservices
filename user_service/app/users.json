@@ -1,0 +1,7 @@
+[
+    
+{"id":"1","first_name":"admin","last_name":"admin","username":"admin","email":"admin@gmail.com","phone":"01013403016","hashed_password":"$2b$12$gcvd3hqyBS873a3EnZ66COiVQ5ZR81iDBg/1qcruupx3vP51Esnqe","is_active":true,"role_id":1},
+{"id":"2","first_name":"Ahmed","last_name":"Hassan","username":"ahmed2020","email":"ahmed@gmail.com","phone":"01111788511","hashed_password":"$2b$12$gcvd3hqyBS873a3EnZ66COiVQ5ZR81iDBg/1qcruupx3vP51Esnqe","is_active":true,"role_id":2},
+{"id":"3","first_name":"eslam","last_name":"hassan","username":"eslam2020","email":"eslam@gmail.com","phone":"015","hashed_password":"$2b$12$gcvd3hqyBS873a3EnZ66COiVQ5ZR81iDBg/1qcruupx3vP51Esnqe","is_active":true,"role_id":null}
+
+]
