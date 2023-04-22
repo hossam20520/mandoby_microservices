@@ -62,7 +62,7 @@ router = APIRouter()
 
 @router.get("/seeds")
 def create_user_seeds( db: Session = Depends(get_db)  ):
-    f = open('users.json')
+    f = open('app/users.json')
     data = json.load(f)   
     return crud.create_user_seeds(db, data)
 

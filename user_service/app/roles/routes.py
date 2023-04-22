@@ -28,7 +28,7 @@ router = APIRouter()
 
 @router.get("/seeds")
 def create_roles_seeds( db: Session = Depends(get_db)  ):
-    f = open('roles.json')
+    f = open('app/roles.json')
     data = json.load(f)   
     return crud.create_roles_seeds(db, data)
 
