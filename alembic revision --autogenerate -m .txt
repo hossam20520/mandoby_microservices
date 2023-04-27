@@ -1,0 +1,11 @@
+alembic revision --autogenerate -m "create categorys table from CategoryModel model"
+
+alembic revision -m "create products table"
+alembic upgrade head
+alembic revision -m "add test column to categorys table"
+alembic revision  -m "remove column"
+op.drop_column('table_name', 'column_name')
+
+alembic upgrade
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjp7Imxhc3RfbmFtZSI6ImFkbWluIiwidXBkYXRlZF9hdCI6IjIwMjMtMDQtMjJUMDE6MTc6MTAuNzg5OTIwIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZV9pZCI6MSwiY3JlYXRlZF9hdCI6IjIwMjMtMDQtMjJUMDE6MTc6MTAuNzg5OTIwIiwiZmlyc3RfbmFtZSI6ImFkbWluIiwidXNlcm5hbWUiOiJhZG1pbiIsInBob25lIjoiMDEwMTM0MDMwMTYiLCJpc19hY3RpdmUiOnRydWV9LCJleHBpcmVzIjoyNTY4MjQ2MTUzMC44NDY3MDZ9.-QyUCoX_Jn3fV0TwPpACyWReXjxPzEIHpXYWSrA75rw

@@ -26,6 +26,20 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 router = APIRouter()
 
 
+
+
+@router.get("/pagentaion",  dependencies=[ Depends( JWTBearer())])
+def get_all_roles_pagenataion(skip: int = 0, limit: int = 100, db: Session = Depends(get_db) ,  token: str = Depends(oauth2_scheme) ): 
+    # Start RoleCheckerByToken
+    userToken = decodeJWT(token)
+    allow_access = RoleCheckerByToken(token, "roles" , db , "read__roles")
+    allow_access.__call__(userToken['user_id']['id'])
+    # End RoleCheckerByToken
+    roles = crud.get_roles_pagentation(db, skip=skip, limit=limit)
+    # print(token)
+    return roles
+
+
 @router.get("/seeds")
 def create_roles_seeds( db: Session = Depends(get_db)  ):
     f = open('app/roles.json')
@@ -47,7 +61,7 @@ def get_all_roles(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 def create_role(role: RoleCreate, db: Session = Depends(get_db) ,  token: str = Depends(oauth2_scheme)):
     # Start RoleCheckerByToken
     userToken = decodeJWT(token)
-    allow_access = RoleCheckerByToken(token, "roles" , db , "create__roles")
+    allow_access = RoleCheckerByToken(token, "roles" , db , "create__role")
     allow_access.__call__(userToken['user_id']['id'])
     # End RoleCheckerByToken
     return crud.create_role(db=db, role=role)

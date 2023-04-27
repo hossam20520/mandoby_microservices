@@ -22,6 +22,7 @@ from app.permissions.models import PermissionModel
 from app.permission_roles.models import Permission_roleModel
 from app.role_users.models import Role_userModel
 from app.roles.models import RoleModel
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
@@ -48,9 +49,36 @@ class RoleCheckerByToken:
         ).all()
 
         permissions = []
+        
         for ite in q:
            data = jsonable_encoder(ite)
            json = data['PermissionModel']
         # print()
            permissions.append(json['title'])
         return permissions
+    
+    def geRole(self , userID):
+        data = self.db.query(Role_userModel).filter(Role_userModel.user_id == userID).first()
+        data = jsonable_encoder(data)
+        role = self.db.query(RoleModel).filter(RoleModel.id == data['role_id']).first()
+        role = jsonable_encoder(role)
+        return role['name']
+    
+
+    def getPermissionsByTitle(self , name):
+        q = (self.db.query(  Permission_roleModel, RoleModel  , PermissionModel )
+        .join(PermissionModel , PermissionModel.id == Permission_roleModel.permission_id)
+        .filter(RoleModel.name == name)
+        .filter(Permission_roleModel.role_id == RoleModel.id)
+        ).all()
+
+        permissions = []
+        
+        for ite in q:
+           data = jsonable_encoder(ite)
+           json = data['PermissionModel']
+        # print()
+           permissions.append(json['title'])
+        return permissions
+        
+

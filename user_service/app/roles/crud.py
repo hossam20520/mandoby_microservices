@@ -9,20 +9,26 @@ from app.global_schemas import ResponseModel
 
 
 
+def get_roles_pagentation(db: Session, skip: int = 0, limit: int = 100):
+        data = db.query(RoleModel).order_by(RoleModel.id.desc())
+        items = data.offset(skip).limit(limit).all()
+        return {"items":items , "total":data.count() }
+
+
 def get_roles(db: Session, skip: int = 0, limit: int = 100):
     return db.query(RoleModel).offset(skip).limit(limit).all()
 
 
 def create_role(db: Session, role:Role):
-    try:
+    # try:
         db_role  = RoleModel(**role.dict())
         db.add(db_role)
         db.commit()
         db.refresh(db_role)
-    except IntegrityError:
-         db.rollback()
-         raise HTTPException(422, ResponseModel([] , "Role already exist" , False , 422 , {"error":"Already exists"})) from None
-    return db_role
+    # except IntegrityError:
+        db.rollback()
+        #  raise HTTPException(422, ResponseModel([] , "Role already exist" , False , 422 , {"error":"Already exists"})) from None
+        return db_role
 
 
 def delete_all_role(db: Session):

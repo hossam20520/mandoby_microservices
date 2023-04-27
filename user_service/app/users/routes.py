@@ -8,8 +8,7 @@ import app.permissions.crud as permission_crud
 import app.roles.crud as roles_crud
 import app.permission_roles.crud as permission_role_crud
 import app.role_users.crud as role_user_crud
-
-
+from app.users.schemas import UserInfo
 from app.users.schemas import UserCreate , User
 from app.database import SessionLocal, engine
 from app.global_schemas import ResponseModel , ResponseModelSchema
@@ -17,7 +16,9 @@ from app.auth.RoleChecker import  RoleCheckerByToken
 from app.auth.jwt_bearer import JWTBearer , decodeJWT
 from fastapi.security import OAuth2PasswordBearer
 import json
-
+import requests
+from app.auth.register import CheckDubulcatedRecords
+from fastapi.encoders import jsonable_encoder
 
 def get_db():
     db = SessionLocal()
@@ -67,11 +68,65 @@ def create_user_seeds( db: Session = Depends(get_db)  ):
     return crud.create_user_seeds(db, data)
 
 
-# @router.delete("/seeds" )
-# def delete_all_users_seed(db: Session = Depends(get_db) ):
-#     crud.delete_all_user(db)
-#     raise  HTTPException(200, ResponseModel([] , "All Users Deleted" , True , 200 , {})) from None
+@router.get("/test" )
+def test_all_user(db: Session = Depends(get_db) ):
+    response = requests.get('http://product_service:8000/api/v1.0/categorys/?skip=0&limit=100')
+    data = json.loads(response.text)
 
+    # crud.delete_all_user(db)
+    # http://localhost:8080/api/v1.0/categorys/?skip=0&limit=100
+    # raise  HTTPException(200, ResponseModel([] , "All Users Deleted" , True , 200 , {})) from None
+    return data
+
+
+
+# @router.post("/info", dependencies=[ Depends( JWTBearer())])
+# def get_info_user( db: Session = Depends(get_db) , token: str = Depends(oauth2_scheme) ):
+#     # Start RoleCheckerByToken
+#     userToken = decodeJWT(token)
+#     print(userToken)
+#     # allow_access = RoleCheckerByToken(token, "users" , db , "read__users")
+#     # allow_access.__call__(userToken['user_id']['id'])
+#     # End RoleCheckerByToken
+#     # users = crud.get_users(db, skip=skip, limit=limit)
+#     return 55
+
+@router.get("/info", response_model=UserInfo ,  dependencies=[ Depends( JWTBearer())])
+def get_info_user( db: Session = Depends(get_db) , token: str = Depends(oauth2_scheme)):
+    # Start RoleCheckerByToken
+    userToken = decodeJWT(token)
+    allow_access = RoleCheckerByToken(token, "users" , db , "show__user")
+    role = allow_access.geRole(userToken['user_id']['id'])
+    permissions = allow_access.getPermissionsByTitle(role)
+    # End RoleCheckerByToken
+    db_user = crud.get_user(db, user_id=userToken['user_id']['id'])
+    return_model = {
+        "id": db_user.id,
+        "name":db_user.first_name + " " + db_user.last_name,
+        "first_name": db_user.first_name,
+        "last_name": db_user.last_name,
+        "username": db_user.username,
+        "email": db_user.email,
+        "phone": db_user.phone,
+        "is_active": db_user.is_active,
+        "roles": [role],
+        "permissions":permissions
+     }
+    if db_user is None:
+        raise HTTPException(status_code=404, detail=ResponseModel([] , "User not found" , True , 404 , {}))
+    return return_model
+
+
+
+@router.get("/pagentation" , dependencies=[ Depends( JWTBearer())])
+def get_all_users_pagenation(skip: int = 0, limit: int = 100, db: Session = Depends(get_db) , token: str = Depends(oauth2_scheme) ):
+    # Start RoleCheckerByToken
+    userToken = decodeJWT(token)
+    allow_access = RoleCheckerByToken(token, "users" , db , "read__users")
+    allow_access.__call__(userToken['user_id']['id'])
+    # End RoleCheckerByToken
+    users = crud.get_users_pagentation(db, skip=skip, limit=limit)
+    return users
 
 
 @router.get("/", response_model=List[User] , dependencies=[ Depends( JWTBearer())])
@@ -83,6 +138,10 @@ def get_all_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
     # End RoleCheckerByToken
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
+
+
+
+
 
 @router.post("/", response_model=User ,  dependencies=[ Depends( JWTBearer())])
 def create_user(user: UserCreate, db: Session = Depends(get_db) ,  token: str = Depends(oauth2_scheme) ):
@@ -123,6 +182,8 @@ def update_user(id:int ,db: Session = Depends(get_db) , user: UserCreate = Body(
     allow_access = RoleCheckerByToken(token, "users" , db , "update__user")
     allow_access.__call__(userToken['user_id']['id'])
     # End RoleCheckerByToken
+    data = jsonable_encoder(user)
+    # CheckDubulcatedRecords(db ,  data )
     db_user = crud.update_user(db, user   ,id)
     return  db_user
 

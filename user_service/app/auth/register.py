@@ -63,13 +63,13 @@ def Register(db: Session = Depends(get_db) ,register: RegisterSchema = Body(...)
     username = db.query(UserModel).filter(UserModel.username == register.username).first()
     phone = db.query(UserModel).filter(UserModel.phone == register.phone).first()
     if (email):
-         raise HTTPException(status_code=200, detail=ResponseModel([] , "Email already exists" , True , 200 , {}))
+         raise HTTPException(status_code=409, detail=ResponseModel([] , "البريد الالكتروني متسجل من قبل" , True , 409 , {}))
         #  return "Email already exists"
     if (username):
-        raise HTTPException(status_code=200, detail=ResponseModel([] , "Username already exists" , True , 200 , {}))
+        raise HTTPException(status_code=409, detail=ResponseModel([] , "اسم المستخدم موجود بالفعل" , True , 409 , {}))
 
     if (phone):
-        raise HTTPException(status_code=200, detail=ResponseModel([] , "Phone already exists" , True , 200 , {}))
+        raise HTTPException(status_code=409, detail=ResponseModel([] , "رقم الهاتف موجود بالفعل" , True , 409 , {}))
     
     db_user  = UserModel(**register.dict())
     db.add(db_user)
@@ -79,3 +79,19 @@ def Register(db: Session = Depends(get_db) ,register: RegisterSchema = Body(...)
     # Here you can controll in fields 
     data.pop('hashed_password', None)
     return data
+
+
+
+def CheckDubulcatedRecords(db , obj):
+    email = db.query(UserModel).filter(UserModel.email == obj['email']).first()
+    username = db.query(UserModel).filter(UserModel.username == obj['username']).first()
+    phone = db.query(UserModel).filter(UserModel.phone == obj['phone']).first()
+    if (email):
+         raise HTTPException(status_code=409, detail=ResponseModel([] , "البريد الالكتروني متسجل من قبل" , True , 409 , {}))
+    
+    #  return "Email already exists"
+    if (username):
+        raise HTTPException(status_code=409, detail=ResponseModel([] , "اسم المستخدم موجود بالفعل" , True , 409 , {}))
+
+    if (phone):
+        raise HTTPException(status_code=409, detail=ResponseModel([] , "رقم الهاتف موجود بالفعل" , True , 409 , {}))

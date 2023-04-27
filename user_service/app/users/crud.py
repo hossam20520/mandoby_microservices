@@ -10,6 +10,14 @@ from sqlalchemy.sql import func
 
 
 
+
+def get_users_pagentation(db: Session, skip: int = 0, limit: int = 100):
+        data = db.query(UserModel).order_by(UserModel.id.desc())
+        items = data.offset(skip).limit(limit).all()
+        return {"items":items , "total":data.count() }
+
+
+
 def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(UserModel).offset(skip).limit(limit).all()
 
