@@ -48,6 +48,8 @@ async def UploadImageCategory(file: UploadFile):
         file_name, file_ext = os.path.splitext(file.filename)
         new_file_name = f"{timestamp}{timestamp2}{file_ext}"
         file_location = f"{current_dir}/media/category/{new_file_name}"
+        if not os.path.exists('/app/media/category'):
+             os.makedirs('/app/media/category')
         with open(file_location, "wb+") as file_object:
                file_object.write(file.file.read())
         return {"filename": new_file_name}
