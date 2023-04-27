@@ -16,7 +16,7 @@ from app.auth.RoleChecker import  RoleCheckerByToken
 from app.auth.jwt_bearer import JWTBearer , decodeJWT
 from fastapi.security import OAuth2PasswordBearer
 import json
-import requests
+# import requests
 from app.auth.register import CheckDubulcatedRecords
 from fastapi.encoders import jsonable_encoder
 
@@ -68,15 +68,15 @@ def create_user_seeds( db: Session = Depends(get_db)  ):
     return crud.create_user_seeds(db, data)
 
 
-@router.get("/test" )
-def test_all_user(db: Session = Depends(get_db) ):
-    response = requests.get('http://product_service:8000/api/v1.0/categorys/?skip=0&limit=100')
-    data = json.loads(response.text)
+# @router.get("/test" )
+# def test_all_user(db: Session = Depends(get_db) ):
+#     response = requests.get('http://product_service:8000/api/v1.0/categorys/?skip=0&limit=100')
+#     data = json.loads(response.text)
 
-    # crud.delete_all_user(db)
-    # http://localhost:8080/api/v1.0/categorys/?skip=0&limit=100
-    # raise  HTTPException(200, ResponseModel([] , "All Users Deleted" , True , 200 , {})) from None
-    return data
+#     # crud.delete_all_user(db)
+#     # http://localhost:8080/api/v1.0/categorys/?skip=0&limit=100
+#     # raise  HTTPException(200, ResponseModel([] , "All Users Deleted" , True , 200 , {})) from None
+#     return data
 
 
 
