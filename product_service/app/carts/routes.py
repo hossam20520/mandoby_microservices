@@ -48,6 +48,8 @@ def Get_cart_data(db: Session = Depends(get_db) , token: str = Header() ):
      auth.accessToken(token)
      user = auth.getUserInfo()
      cart = crud.CartByUserAnOrder(db , user['id']) 
+     if cart == None:
+         return []
      items = crud.getCartItems(db , cart.id)
      if items == None:
          return []
