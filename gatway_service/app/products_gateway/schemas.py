@@ -8,6 +8,8 @@ from pydantic import BaseModel , EmailStr ,  Field
 class ProductCreate(BaseModel):
     en_title:str
     ar_title:str 
+    desc:str
+    discount:float
     slug:str 
     code:str
     Type_barcode:str 
