@@ -9,6 +9,13 @@ from app.global_schemas import ResponseModel
 
 
 
+
+def get_units_pagentation(db: Session, skip: int = 0, limit: int = 100):
+        data = db.query(UnitModel).order_by(UnitModel.id.desc())
+        items = data.offset(skip).limit(limit).all()
+        return {"items":items , "total":data.count() }
+
+
 def get_units(db: Session, skip: int = 0, limit: int = 100):
     return db.query(UnitModel).offset(skip).limit(limit).all()
 

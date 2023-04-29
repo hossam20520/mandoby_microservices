@@ -23,15 +23,17 @@ def upgrade() -> None:
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('en_title', sa.String(length=100), nullable=True),
         sa.Column('ar_title', sa.String(length=100), nullable=True),
+        sa.Column('desc', sa.String(length=500), nullable=True),
+        sa.Column('discount', sa.Float(precision=10, asdecimal=False), nullable=True),
         sa.Column('slug', sa.String(length=100), nullable=True),
         sa.Column('code', sa.String(length=100), nullable=True),
         sa.Column('Type_barcode', sa.String(length=50), nullable=True),
         sa.Column('price', sa.Float(precision=10, asdecimal=False), nullable=True),
         sa.Column('cost', sa.Float(precision=10, asdecimal=False), nullable=True),
-        sa.Column('category_id', sa.Integer(), sa.ForeignKey('categorys.id'), nullable=True),
-        sa.Column('unit_id', sa.Integer(), sa.ForeignKey('units.id'), nullable=True),
-        sa.Column('unit_sale_id', sa.Integer(), sa.ForeignKey('units.id'), nullable=True),
-        sa.Column('unit_purchase_id', sa.Integer(), sa.ForeignKey('units.id'), nullable=True),
+        sa.Column('category_id', sa.Integer(), nullable=True),
+        sa.Column('unit_id', sa.Integer(), nullable=True),
+        sa.Column('unit_sale_id', sa.Integer(), nullable=True),
+        sa.Column('unit_purchase_id', sa.Integer(), nullable=True),
         sa.Column('TaxNet', sa.Float(precision=10, asdecimal=False), nullable=True, server_default='0'),
         sa.Column('tax_method', sa.String(length=50), nullable=True, server_default='1'),
         sa.Column('image', sa.String(length=200), nullable=True),
@@ -43,7 +45,7 @@ def upgrade() -> None:
         sa.Column('updated_at', sa.DateTime(), server_default=func.now(), nullable=False, onupdate=datetime.now),
         sa.Column('deleted_at', sa.DateTime(), nullable=True),
         sa.PrimaryKeyConstraint('id'),
-        sa.Index('idx_products_category_id', 'category_id')
+
     )
 
 

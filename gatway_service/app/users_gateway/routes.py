@@ -9,6 +9,7 @@ import requests
 from app.auth.auth import Auth
 from fastapi.encoders import jsonable_encoder
 from app.users_gateway.schemas import UserCreate
+from app.auth.auth import Auth
 router = APIRouter()
 
 
@@ -56,7 +57,12 @@ def delete_user(id:int  ,  token: str =  Header()):
     return response.json()
 
 
-
+@router.get("/user/info")
+async def get_user_info(token: str =  Header()):
+    auth = Auth()
+    auth.accessToken(token)
+    user = auth.getUserInfo()
+    return user
 
 
 

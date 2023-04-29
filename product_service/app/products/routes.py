@@ -7,7 +7,7 @@ import app.products.crud as crud
 from app.products.schemas import ProductCreate , Product
 from app.database import SessionLocal, engine
 from app.global_schemas import ResponseModel , ResponseModelSchema
-
+from app.products.relations.products import ProductsC
 
 
 def get_db():
@@ -20,6 +20,21 @@ def get_db():
 
 
 router = APIRouter()
+
+
+@router.get("/pagentation" )
+def get_all_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    products = crud.get_product_pagentation(db, skip=skip, limit=limit)
+    return products
+
+
+@router.get("/mobile/pagentation" )
+def get__moble_all_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    # products = crud.get_product_pagentation(db, skip=skip, limit=limit)
+    pro = ProductsC(db )
+    data = pro.getProducts( skip=skip , limit=limit)
+
+    return data
 
 @router.get("/", response_model=List[Product])
 def get_all_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -35,7 +50,7 @@ def delete_all_products(db: Session = Depends(get_db)):
 	db_product = crud.delete_all_product(db)
 	raise  HTTPException(200, ResponseModel([] , "All Products Deleted" , True , 200 , {})) from None
 
-@router.get("/{ product_id}", response_model=Product)
+@router.get("/{product_id}", response_model=Product)
 def get_one_product(product_id: int, db: Session = Depends(get_db)):
     db_product = crud.get_product(db, product_id=product_id)
     if db_product is None:

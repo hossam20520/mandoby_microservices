@@ -22,6 +22,15 @@ def get_db():
 
 router = APIRouter()
 
+
+
+
+@router.get("/pagentation" )
+def get_all_units(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    units = crud.get_units_pagentation(db, skip=skip, limit=limit)
+    return units
+
+
 @router.get("/", response_model=List[Unit])
 def get_all_units(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     units = crud.get_units(db, skip=skip, limit=limit)

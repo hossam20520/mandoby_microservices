@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 from app.database import Base
 from sqlalchemy.sql import func
 from sqlalchemy.orm import declarative_base
-
+from app.units.models import UnitModel
 Base = declarative_base()
 
 class TrackTimeMixin:
@@ -25,15 +25,17 @@ class ProductModel(Base , TrackTimeMixin , SoftDeleteMixin ):
     id = Column(Integer, primary_key=True, index=True)
     en_title = Column(String(100))
     ar_title = Column(String(100))
+    desc     =  Column(String(500))
+    discount =  Column(Float(precision=10, asdecimal=False))
     slug     = Column(String(100))
     code     = Column(String(100))
     Type_barcode = Column(String(50) , nullable=True)
     price = Column(Float(precision=10, asdecimal=False))
     cost = Column(Float(precision=10, asdecimal=False))
-    category_id  = Column(Integer, ForeignKey("categorys.id") , index=True)
-    unit_id = Column(Integer, ForeignKey("units.id") , nullable=True)
-    unit_sale_id = Column(Integer, ForeignKey("units.id") , nullable=True)
-    unit_purchase_id = Column(Integer, ForeignKey("units.id") , nullable=True)
+    category_id  = Column(Integer, nullable=True, index=True)
+    unit_id = Column(Integer, nullable=True, index=True)
+    unit_sale_id = Column(Integer, nullable=True, index=True)
+    unit_purchase_id = Column(Integer, nullable=True, index=True)
     TaxNet  = Column(Float(precision=10, asdecimal=False) , nullable=True, default=0)
     tax_method  = Column(String(50) , default= '1')
     image = Column(String(200) , nullable=True)
@@ -41,5 +43,5 @@ class ProductModel(Base , TrackTimeMixin , SoftDeleteMixin ):
     stock_alert = Column(Float(precision=10, asdecimal=False), nullable=True, default=0)
     is_variant = Column(Boolean, default=False)
     is_active = Column(Boolean, default=False)
-   
+    # unit = relationship(UnitModel)
     

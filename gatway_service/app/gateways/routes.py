@@ -129,15 +129,5 @@ async def getProducts(skip: int = 0, limit: int = 100):
 
 
 # oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-@router.get("/user/info")
-async def get_user_info(token: str =  Header()):
-    headers = {}
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    # Make authenticated request using the access token
-        response = requests.get("http://user_service:8000/api/v1.0/users/info", headers=headers)
-        # if response.json() == 'null':
-        #     return 66
-        return response.json()
-    return token
+
      

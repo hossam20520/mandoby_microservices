@@ -9,7 +9,7 @@ import app.units.models as models_units
 from app.units.routes import router as units_router 
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware import Middleware
-
+from app.carts.routes import router as carts_router 
 
 models_units.Base.metadata.create_all(bind=engine) 
 models_categorys.Base.metadata.create_all(bind=engine) 
@@ -26,7 +26,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+app.include_router(carts_router, tags=["Carts"], prefix="/api/v1.0/carts")
 app.include_router(categorys_router, tags=["Categorys"], prefix="/api/v1.0/categorys") 
 app.include_router(units_router, tags=["Units"], prefix="/api/v1.0/units") 
 app.include_router(products_router, tags=["Products"], prefix="/api/v1.0/products") 

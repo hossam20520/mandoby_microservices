@@ -9,6 +9,15 @@ from app.global_schemas import ResponseModel
 
 
 
+
+
+def get_product_pagentation(db: Session, skip: int = 0, limit: int = 100):
+        data = db.query(ProductModel).order_by(ProductModel.id.desc())
+        items = data.offset(skip).limit(limit).all()
+        return {"items":items , "total":data.count() }
+
+
+
 def get_products(db: Session, skip: int = 0, limit: int = 100):
     return db.query(ProductModel).offset(skip).limit(limit).all()
 

@@ -21,7 +21,7 @@ class SoftDeleteMixin:
 
 
 
-class UnitModel(Base , TrackTimeMixin ):
+class UnitModel(Base , TrackTimeMixin  , SoftDeleteMixin):
     __tablename__ = "units"
     id = Column(Integer, primary_key=True, index=True)
     en_title = Column(String(50))
