@@ -5,16 +5,40 @@ from app.products.schemas import ProductCreate , Product
 from fastapi import Depends, HTTPException
 from sqlalchemy.ext.declarative import DeclarativeMeta as Model
 from sqlalchemy.exc import IntegrityError
+from app.categorys.models import CategoryModel
 from app.global_schemas import ResponseModel
-
-
+from sqlalchemy.orm import joinedload
+from app.units.models import UnitModel
 
 
 
 def get_product_pagentation(db: Session, skip: int = 0, limit: int = 100):
         data = db.query(ProductModel).order_by(ProductModel.id.desc())
         items = data.offset(skip).limit(limit).all()
-        return {"items":items , "total":data.count() }
+        return {"items":items , "total":data.count()}
+
+
+
+def get_product_pagentation_category(db: Session, skip , limit  , category_idd ):
+        q = ( db.query(ProductModel, CategoryModel ,  UnitModel )
+        .join(CategoryModel, CategoryModel.id == ProductModel.category_id)
+        .join(UnitModel , UnitModel.id == ProductModel.unit_id)
+        .filter(CategoryModel.id ==  category_idd)
+        .order_by(ProductModel.id.desc())
+        .offset(skip)  # skip the first 10 results
+        .limit(limit)  # return a maximum of 20 results
+        .all()
+        )
+
+        count = (
+        db.query(ProductModel)
+        .join(CategoryModel, CategoryModel.id == ProductModel.category_id)
+        .filter(CategoryModel.id == category_idd)
+        .count()
+        )
+
+
+        return {"items":q  , "total":count }
 
 
 
@@ -41,7 +65,7 @@ def delete_all_product(db: Session):
 
 
 def get_product(db: Session, product_id: int):
-    return db.query(ProductModel).filter(ProductModel.id == product_id).first()
+    return db.query(ProductModel , UnitModel).join(UnitModel , UnitModel.id == ProductModel.unit_id).filter(ProductModel.id == product_id).first()
 
 
 def get_product_by_email(db: Session, email: str):

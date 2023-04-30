@@ -108,8 +108,9 @@ def create_cart(data: cartPayload, db: Session = Depends(get_db)  , token: str =
     # TODO Add total field to cart Item  and add this line to cartItem  ( "total": ( productInfo['price'] - productInfo['discount']) * data.qty )
     # totalCartPrice =  data.qty *  productInfo['price']
 
-    originalPrice = productInfo['price']    #add discount here
-    productId = productInfo['id']
+    originalPrice = productInfo['product']['ProductModel']['price']    #add discount here
+    qtyStock = stock['qty']
+    productId = productInfo['product']['ProductModel']['id']
     userid = user['id']
     demand_qty = data.qty
     cart = crud.CartByUserAnOrder(db , user['id']) 
@@ -119,8 +120,14 @@ def create_cart(data: cartPayload, db: Session = Depends(get_db)  , token: str =
     if cart is not None:
         cart_id = cart.id
         CurrentTotalCart = cart.total
-        item = crud.SelectItemBy(db , productInfo['id'] , cart_id)
+        # return cart items by product id and cart id 
+        item = crud.SelectItemBy(db ,productId , cart_id)
         if item is not None:
+            # this add max items if the demand qty is larger than the stock 
+            if  (item.quantity + demand_qty)  >  qtyStock:
+                 demand_qty = qtyStock - item.quantity
+   
+            # stop decrese when the queantiy is one 
             if item.quantity == 1 and demand_qty == -1:
                 return "success"
             cartITem = CartItemModel(quantity = demand_qty + item.quantity  , subtotal = item.subtotal + (originalPrice * demand_qty))

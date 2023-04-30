@@ -27,6 +27,17 @@ def product_list(skip: int = 0, limit: int = 100 , token: str =  Header()):
     return response.json()
 
 
+@router.get("/{productID}")
+def product_info(productID: int , token: str =  Header()):
+    auth = Auth()
+    auth.accessToken(token)
+    headers = auth.getHeaders()
+    # communicate to inventory service 
+    # response_inventory = requests.get(f"http://product_service:8000/api/v1.0/products/{productID}" , headers=headers   )
+    
+    response = requests.get(f"http://product_service:8000/api/v1.0/products/{productID}" , headers=headers   )
+    return response.json()
+
 
 @router.get("/moble/list")
 def product_list(skip: int = 0, limit: int = 100 , token: str =  Header()):
@@ -46,6 +57,14 @@ def create_user( product:ProductCreate ,  token: str =  Header()):
     response = requests.post(f"http://product_service:8000/api/v1.0/products" ,   headers=headers  , json=data   )
     return response.json()
 
+
+@router.get("/category/{category_id}")
+def product_list_by_cat(category_id: int  , skip: int = 0, limit: int = 100  , token: str =  Header()):
+    auth = Auth()
+    auth.accessToken(token)
+    headers = auth.getHeaders()
+    response = requests.get(f"http://product_service:8000/api/v1.0/products/category/{category_id}?skip={skip}&limit={limit}" , headers=headers   )
+    return response.json()
 
 
 # @router.put("/update/{id}")

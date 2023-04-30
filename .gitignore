@@ -2,3 +2,4 @@ databases/postgres_data_user/
 databases/postgres_data_inventory
 product_service/media/category/
 gatway_service/media/category/
+databases/postgres_data_order_management/
