@@ -24,6 +24,14 @@ def users_list(skip: int = 0, limit: int = 100 , token: str =  Header()):
 
 
 
+@router.post("/register")
+def create_user( user:UserCreate):
+
+    data = jsonable_encoder(user)
+    response = requests.post(f"http://user_service:8000/api/v1.0/register/client" ,  json=data )
+    return response.json()
+
+
 
 @router.post("/create")
 def create_user( user:UserCreate ,  token: str =  Header()):
