@@ -6,14 +6,22 @@ from pydantic import BaseModel , EmailStr ,  Field
 
 
 
-class Order_managementCreate(BaseModel):
-    title:str
+class AvaregionCreate(BaseModel):
+    gov_id:int
+    ar_title:str
+    en_title:str
+    code:str
+    lat:str
+    long:str
+    ava:bool
+    deleted:bool
+
 
     class Config:
         orm_mode = True
 
 
-class Order_management(Order_managementCreate):
+class Avaregion(AvaregionCreate):
     id: int 
 
     class Config:

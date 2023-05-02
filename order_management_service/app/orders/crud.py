@@ -14,15 +14,11 @@ def get_orders(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_order(db: Session, order:Order):
-    try:
         db_order  = OrderModel(**order.dict())
         db.add(db_order)
         db.commit()
         db.refresh(db_order)
-    except IntegrityError:
-         db.rollback()
-         raise HTTPException(422, ResponseModel([] , "Order already exist" , False , 422 , {"error":"Already exists"})) from None
-    return db_order
+        return db_order
 
 
 def delete_all_order(db: Session):

@@ -21,7 +21,7 @@ class PaymentModel(Base , TrackTimeMixin ):
     __tablename__ = "payments"
     id = Column(Integer, primary_key=True, index=True)
     user_id  = Column(Integer, nullable=True, index=True)
-    shop_id  = Column(Integer, nullable=True, index=True)
+    shop_id  = Column(Integer, nullable=True, index=True , default=0)
     order_id  = Column(Integer, nullable=True, index=True)
     payment_status  = Column(Integer, nullable=True, index=True)
     paid =  Column(Integer, nullable=True, index=True)
@@ -31,19 +31,20 @@ class PaymentModel(Base , TrackTimeMixin ):
 
 
 
-class PaymentMethodsModel(Base , TrackTimeMixin ):
-    __tablename__ = "payments"
-    id = Column(Integer, primary_key=True, index=True)
-    ar_title = Column(String(50))
-    en_title = Column(String(50))
+
+# class PaymentMethodsModel(Base , TrackTimeMixin ):
+#     __tablename__ = "payments"
+#     id = Column(Integer, primary_key=True, index=True)
+#     ar_title = Column(String(50))
+#     en_title = Column(String(50))
 
 
 
 
-class PaymentStatusModel(Base , TrackTimeMixin ):
-    __tablename__ = "payments"
-    id = Column(Integer, primary_key=True, index=True)
-    ar_title = Column(String(50))
-    en_title = Column(String(50))
+# class PaymentStatusModel(Base , TrackTimeMixin ):
+#     __tablename__ = "payments"
+#     id = Column(Integer, primary_key=True, index=True)
+#     ar_title = Column(String(50))
+#     en_title = Column(String(50))
     
     

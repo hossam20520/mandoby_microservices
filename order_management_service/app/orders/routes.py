@@ -1,6 +1,6 @@
 
 from typing import List
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body , Header
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 import app.orders.models as models
@@ -8,7 +8,7 @@ import app.orders.crud as crud
 from app.orders.schemas import OrderCreate , Order
 from app.database import SessionLocal, engine
 from app.global_schemas import ResponseModel , ResponseModelSchema
-
+from app.Services.CartService import CartService
 
 
 def get_db():
@@ -21,6 +21,22 @@ def get_db():
 
 
 router = APIRouter()
+
+
+@router.post("/create" )
+def create_order_for_user(order: OrderCreate, token:str = Header() ,  db: Session = Depends(get_db)):
+    # communicate to cart and get cart id  and others info 
+    cart  = CartService(db , token)
+    response = cart.GetCartData()
+    return response
+    
+    # communccate to address and get address id 
+
+
+    # commminucate to user and get user info 
+
+    return crud.create_order(db=db, order=order)
+
 
 @router.get("/", response_model=List[Order])
 def get_all_orders(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -36,7 +52,7 @@ def delete_all_orders(db: Session = Depends(get_db)):
 	db_order = crud.delete_all_order(db)
 	raise  HTTPException(200, ResponseModel([] , "All Orders Deleted" , True , 200 , {})) from None
 
-@router.get("/{ order_id}", response_model=Order)
+@router.get("/{order_id}", response_model=Order)
 def get_one_order(order_id: int, db: Session = Depends(get_db)):
     db_order = crud.get_order(db, order_id=order_id)
     if db_order is None:

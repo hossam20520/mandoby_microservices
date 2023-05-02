@@ -19,7 +19,12 @@ class SoftDeleteMixin:
 
 class OrderModel(Base , TrackTimeMixin , SoftDeleteMixin ):
     __tablename__ = "orders"
+    id = Column(Integer, primary_key=True, index=True)
+    address_id = Column(Integer, nullable=True, index=True )
+    order_number = Column(String(300) , nullable=True,)
     user_id = Column(Integer, nullable=True, index=True )
+    person_delevery_id = Column(Integer, nullable=True, index=True )
+    order_date = Column(DateTime, server_default=func.now())
     shop_id =   Column(Integer, nullable=True, index=True , default=0)
     payment_id =   Column(Integer, nullable=True, index=True  )
     shipping_id = Column(Integer, nullable=True, index=True , default=0)
@@ -30,6 +35,3 @@ class OrderModel(Base , TrackTimeMixin , SoftDeleteMixin ):
     other_discount = Column(Float(precision=10, asdecimal=False) , default=0)
     subtotal = Column(Float(precision=10, asdecimal=False))
     total = Column(Float(precision=10, asdecimal=False))
-
-
-    
