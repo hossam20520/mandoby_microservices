@@ -4,3 +4,5 @@ product_service/media/category/
 gatway_service/media/category/
 databases/postgres_data_order_management/
 databases/
+dashboard/db_data
+dashboard/vendor
