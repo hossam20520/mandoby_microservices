@@ -79,13 +79,16 @@ def get_one_product(product_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail=ResponseModel([] , " Product not found" , True , 404 , {}))
     
     # 1 - Inventory Service
-    invent = InventoryService()
-    stock = invent.ProductNumInventory(1,product_id)
-
-    stock = stock.json()
+    # invent = InventoryService()
+    # stock = invent.ProductNumInventory(1,product_id)
+    # if stock.status_code == 200:
+         
+    #      stock = stock.json()
+    # else:
+    #     stock = []
     # End Inventory Service 
     product = {
-         "product":db_product , "stock":stock
+         "product":db_product 
     }
     return product
 
