@@ -4,7 +4,7 @@ from fastapi import Depends, FastAPI, HTTPException ,  UploadFile , File ,Form
 from sqlalchemy.orm import Session
 import app.categorys.models as models
 import app.categorys.crud as crud 
-from app.categorys.schemas import CategoryCreate , Category
+from app.categorys.schemas import CategoryCreate , Category , CategoryUpdate
 from app.database import SessionLocal, engine
 from app.global_schemas import ResponseModel , ResponseModelSchema
 import time

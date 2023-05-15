@@ -33,6 +33,7 @@ class ProductModel(Base , TrackTimeMixin , SoftDeleteMixin ):
     price = Column(Float(precision=10, asdecimal=False))
     cost = Column(Float(precision=10, asdecimal=False))
     category_id  = Column(Integer, nullable=True, index=True)
+    brand_id  = Column(Integer, nullable=True, index=True)
     unit_id = Column(Integer, nullable=True, index=True)
     unit_sale_id = Column(Integer, nullable=True, index=True)
     unit_purchase_id = Column(Integer, nullable=True, index=True)

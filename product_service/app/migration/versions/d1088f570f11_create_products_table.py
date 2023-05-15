@@ -31,6 +31,7 @@ def upgrade() -> None:
         sa.Column('price', sa.Float(precision=10, asdecimal=False), nullable=True),
         sa.Column('cost', sa.Float(precision=10, asdecimal=False), nullable=True),
         sa.Column('category_id', sa.Integer(), nullable=True),
+        sa.Column('brand_id', sa.Integer(), nullable=True),
         sa.Column('unit_id', sa.Integer(), nullable=True),
         sa.Column('unit_sale_id', sa.Integer(), nullable=True),
         sa.Column('unit_purchase_id', sa.Integer(), nullable=True),

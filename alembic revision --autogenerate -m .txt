@@ -1,6 +1,6 @@
 alembic revision --autogenerate -m "create categorys table from CategoryModel model"
 
-alembic revision -m "create products table"
+alembic revision -m "create price_list table"
 alembic upgrade head
 alembic revision -m "add test column to categorys table"
 alembic revision  -m "remove column"

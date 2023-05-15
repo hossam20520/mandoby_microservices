@@ -9,7 +9,8 @@ from app.categorys.models import CategoryModel
 from app.global_schemas import ResponseModel
 from sqlalchemy.orm import joinedload
 from app.units.models import UnitModel
-
+from app.brands.models import BrandModel
+from fastapi.encoders import jsonable_encoder
 
 
 def get_product_pagentation(db: Session, skip: int = 0, limit: int = 100):
@@ -17,6 +18,26 @@ def get_product_pagentation(db: Session, skip: int = 0, limit: int = 100):
         items = data.offset(skip).limit(limit).all()
         return {"items":items , "total":data.count()}
 
+
+def getProducts(db: Session , skip , limit):
+         q = (db.query(  ProductModel , CategoryModel, UnitModel  , BrandModel)
+         .join(CategoryModel , CategoryModel.id == ProductModel.category_id)
+         .join(UnitModel , UnitModel.id == ProductModel.unit_id)
+         .join(BrandModel , BrandModel.id == ProductModel.brand_id)
+         .order_by(ProductModel.id.desc())
+         .offset(skip)
+         .limit(limit)
+         .all()
+         )
+         count = (
+           db.query(  ProductModel , CategoryModel, UnitModel )
+         .join(CategoryModel , CategoryModel.id == ProductModel.category_id)
+         .join(UnitModel , UnitModel.id == ProductModel.unit_id).count()
+        )
+
+
+         return {"items":q  , "total":count }
+  
 
 
 def get_product_pagentation_category(db: Session, skip , limit  , category_idd ):
@@ -46,6 +67,9 @@ def get_products(db: Session, skip: int = 0, limit: int = 100):
     return db.query(ProductModel).offset(skip).limit(limit).all()
 
 
+def get_all_products(db: Session ):
+    return db.query(ProductModel).order_by(ProductModel.id.desc()).all()
+
 def create_product(db: Session, product:Product):
     try:
         db_product  = ProductModel(**product.dict())
@@ -65,7 +89,7 @@ def delete_all_product(db: Session):
 
 
 def get_product(db: Session, product_id: int):
-    return db.query(ProductModel , UnitModel).join(UnitModel , UnitModel.id == ProductModel.unit_id).filter(ProductModel.id == product_id).first()
+    return db.query(ProductModel , UnitModel , CategoryModel , BrandModel).join(UnitModel , UnitModel.id == ProductModel.unit_id).join(CategoryModel, CategoryModel.id == ProductModel.category_id).join(BrandModel, BrandModel.id == ProductModel.brand_id).filter(ProductModel.id == product_id).first()
 
 
 def get_product_by_email(db: Session, email: str):

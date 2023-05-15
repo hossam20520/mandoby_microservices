@@ -22,3 +22,13 @@ class Category(CategoryCreate):
 
     class Config:
         orm_mode = True
+
+
+class CategoryUpdate(BaseModel):
+    en_title:str =   Field(default=None, description="Optional name")
+    ar_title:str =   Field(default=None, description="Optional name")
+    code:str  =   Field(default=None, description="Optional name")
+    image:str  =   Field(default=None, description="Optional name")
+
+
+       

@@ -28,6 +28,21 @@ def get_all_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_
     return products
 
 
+
+
+@router.get("/select" )
+def get__moble_all_products_select( db: Session = Depends(get_db)):
+    data = crud.get_all_products( db )
+    return data
+
+
+@router.get("/dashboard/pagentation" )
+def get__moble_all_products_dash(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    # products = crud.get_product_pagentation(db, skip=skip, limit=limit)
+    # pro = ProductsC(db )
+    data = crud.getProducts( db , skip=skip , limit=limit)
+    return data
+
 @router.get("/mobile/pagentation" )
 def get__moble_all_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     # products = crud.get_product_pagentation(db, skip=skip, limit=limit)

@@ -18,6 +18,7 @@ class ProductCreate(BaseModel):
     category_id:int 
     unit_id:int 
     unit_sale_id:int 
+    brand_id:int
     unit_purchase_id:int
     TaxNet:float
     tax_method:str 
