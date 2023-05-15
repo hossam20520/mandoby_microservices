@@ -87,10 +87,10 @@ def get_one_product(product_id: int, db: Session = Depends(get_db)):
     # else:
     #     stock = []
     # End Inventory Service 
-    product = {
-         "product":db_product 
-    }
-    return product
+    # product = {
+    #      "product":db_product 
+    # }
+    return db_product 
 
 @router.put("/{id}")
 def update_product(id:int ,db: Session = Depends(get_db) , product: ProductCreate = Body(...)):
