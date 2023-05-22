@@ -112,6 +112,7 @@ services:
       DB_PASSWORD: 4!rootx2012055@@@78
     restart: always
 
+
   db:
     image: mariadb
     restart: always
